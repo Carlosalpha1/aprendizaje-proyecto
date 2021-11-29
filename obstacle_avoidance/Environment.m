@@ -1,5 +1,5 @@
 
-classdef Environment
+classdef Environment < handle
     properties
         robot
         obstacles = []
@@ -9,8 +9,8 @@ classdef Environment
     end
     methods
         function self=Environment()
-            self.road = plot([-2 -2],[0 10], [2 2], [0 10]);
-            axis([-5 5 0 10]);
+            self.road = plot([-7 -7],[0 10], [2 2], [0 10]);
+            axis([-12 6 0 10]);
             hold on
 
         end
@@ -26,6 +26,7 @@ classdef Environment
         function show(self)
             for i=1:length(self.obstacles)
                 self.obstacles(i).show()
+%                 hold on
             end
         end
 
