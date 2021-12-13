@@ -1,4 +1,17 @@
-
+% -----------------------------------------------
+% -- from Obstacle Avoidance
+% --    Authors:    Javier Martinez
+% --                Irene Bandera
+% --                Veronica Tornero
+% --                Carlos Caminero
+% --
+% -- class Environment:
+% --    * Environment() -> Constructor
+% --    * addObstacle(obstacle)
+% --    * addRobot(robot)
+% --    * show() -> None
+% -- It represents the Environment with obstacles and the robot.
+% -----------------------------------------------
 classdef Environment < handle
     properties
         robot
@@ -26,8 +39,8 @@ classdef Environment < handle
         function show(self)
             for i=1:length(self.obstacles)
                 self.obstacles(i).show()
-%                 hold on
             end
+
             self.robot.show()
         end
 
