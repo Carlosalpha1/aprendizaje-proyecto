@@ -1,16 +1,28 @@
-
+% -----------------------------------------------
+% -- from Obstacle Avoidance
+% --    Authors:    Javier Martinez
+% --                Irene Bandera
+% --                Veronica Tornero
+% --                Carlos Caminero
+% --
+% -- class Environment:
+% --    * Environment() -> Constructor
+% --    * addObstacle(obstacle)
+% --    * addRobot(robot)
+% --    * show() -> None
+% -- It represents the Environment with obstacles and the robot.
+% -----------------------------------------------
 classdef Environment < handle
     properties
         robot
         obstacles = []
-        road
        
 
     end
     methods
         function self=Environment()
-            self.road = plot([-7 -7],[0 10], [2 2], [0 10]);
-            axis([-12 6 0 10]);
+            plot([-7 -7],[0 10], [2 2], [0 10]);
+            axis([-10 10 0 20]);
             hold on
 
         end
