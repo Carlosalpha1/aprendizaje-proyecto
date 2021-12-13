@@ -31,7 +31,7 @@ classdef Robot < handle % handle para que me deje px y py en las funciones de la
       function showMovement(self, v_10, w_10)
          trajectory = animatedline('Color',[0 .7 .7]);
          pos_robot = animatedline('Marker','o');
-         axis([0 20 0 20])
+         %axis([0 20 0 20])
          
          for i = 1:100
             x_ = self.px + (w_10 * i);
@@ -41,7 +41,7 @@ classdef Robot < handle % handle para que me deje px y py en las funciones de la
             
             % update screen
             drawnow limitrate
-            pause(0.01)
+            %pause(0.01)
          end 
          addpoints(pos_robot,x_,y_);
             
@@ -54,9 +54,12 @@ classdef Robot < handle % handle para que me deje px y py en las funciones de la
       end
       
       function move(self, v, w)
-         v_10 = v / 100;
-         w_10 = w / 100;
-         self.showMovement(v_10, w_10);
+%          v_10 = v / 100;
+%          w_10 = w / 100;
+%          self.showMovement(v_10, w_10);
+         self.px = self.px + w;
+         self.py = self.py + v;
+         
       end
       
       function sayPosition(self)
