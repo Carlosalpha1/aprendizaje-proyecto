@@ -15,9 +15,9 @@ classdef Environment < handle
 
         end
 
-%         function addRobot(self, robot)
-%             
-%         end
+        function addRobot(self, robot)
+            self.robot = robot;
+        end
 
         function addObstacle(self, obstacle)
             self.obstacles = [self.obstacles, obstacle];
@@ -28,6 +28,7 @@ classdef Environment < handle
                 self.obstacles(i).show()
 %                 hold on
             end
+            self.robot.show()
         end
 
     end
