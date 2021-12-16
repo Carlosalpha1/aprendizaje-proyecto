@@ -16,7 +16,7 @@
 
 classdef Laser < handle
     properties (Access=public)
-        laser = []
+        laser = zeros([1 180]);
     end
     
     properties (Access=private)
@@ -30,20 +30,22 @@ classdef Laser < handle
     
     methods (Access=public)
         function self = Laser()
-            self.init_laser_values();
         end
         
-        % Update laser values
+        % -- Update laser values
         function update(self, environment)
             syms x;
             obstacles = environment.obstacles;
-            index_beam = 1;
             self.x0 = environment.robot.px;
             self.y0 = environment.robot.py;
             
+            index_beam = 1;
+            self.init_laser_values();
             for angle = 1:self.increment:self.max_angle
                 rad = deg2rad(angle);
-                ybeam = tan(rad)*(x-self.x0)+self.y0;
+                ybeam = tan(rad)*(x-self.x0)+self.y0;   % -- y = mx + n
+                
+                % -- check if beam intersects with the obstacles
                 for i = 1:length(obstacles)
                     [xo_in, yo_in] = self.obs_intersect(ybeam, rad, obstacles(i));
                     dist = self.distance(self.x0,self.y0,xo_in,yo_in);
@@ -55,18 +57,16 @@ classdef Laser < handle
             end
         end
         
-        % Plot laser values
+        
+        % -- Plot laser values
         function show(self)
             index_beam = 1;
             for angle = 1:self.increment:self.max_angle
                 rad = deg2rad(angle);
                 length = self.laser(index_beam);
-                if length == self.infinity
-                    length = self.laser_length;
-                end
                 x = self.x0:0.001:length*cos(rad)+self.x0;
                 if rad > deg2rad(90)
-                    x = -length*cos(deg2rad(180)-rad)-self.x0:0.001:self.x0;
+                    x = -length*cos(deg2rad(180)-rad)+self.x0:0.001:self.x0;
                 end
                 y = tan(rad)*(x-self.x0)+self.y0;
                 plot(x,y);
@@ -89,7 +89,7 @@ classdef Laser < handle
         function xinterval = calc_xinterval(self, rad)
             xinterval = [self.x0 self.laser_length*cos(rad)+self.x0];
             if rad > 1.57
-                xinterval = [-self.laser_length*cos(deg2rad(180)-rad)-self.x0 self.x0];
+                xinterval = [-self.laser_length*cos(deg2rad(180)-rad)+self.x0 self.x0];
             end
         end
         
@@ -112,7 +112,7 @@ classdef Laser < handle
             else
                 [xp,yp] = self.intersect_y(ybeam, xf_obs, obstacle);
             end
-            if xp == 0 && yp == 0
+            if xp == self.x0 && yp == self.y0
                 [xp,yp] = self.intersect_x(ybeam, obstacle, xinterval);
             end
             xo_in = xp;
