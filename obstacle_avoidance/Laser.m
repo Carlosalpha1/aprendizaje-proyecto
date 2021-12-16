@@ -64,6 +64,9 @@ classdef Laser < handle
             for angle = 1:self.increment:self.max_angle
                 rad = deg2rad(angle);
                 length = self.laser(index_beam);
+                if length == self.infinity
+                    length = self.laser_length;
+                end
                 x = self.x0:0.001:length*cos(rad)+self.x0;
                 if rad > deg2rad(90)
                     x = -length*cos(deg2rad(180)-rad)+self.x0:0.001:self.x0;
@@ -149,6 +152,8 @@ classdef Laser < handle
             yp = self.y0;
             
             xs=vpasolve(ybeam==yi_obs, xinterval);
+            %xs = (yi_obs+tan(rad)*self.x0+self.y0)/tan(rad);
+            %fprintf("xs: %f\n", xs);
             ys=yi_obs;
             if xs
                 if (xs >= xi_obs && xs <= xf_obs)
