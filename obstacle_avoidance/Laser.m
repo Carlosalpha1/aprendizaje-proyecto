@@ -111,9 +111,9 @@ classdef Laser < handle
             xinterval = self.calc_xinterval(rad);
             
             if rad < 1.57
-                [xp,yp] = self.intersect_y(ybeam, xi_obs, obstacle);
+                [xp,yp] = self.intersect_y(rad, xi_obs, obstacle);
             else
-                [xp,yp] = self.intersect_y(ybeam, xf_obs, obstacle);
+                [xp,yp] = self.intersect_y(rad, xf_obs, obstacle);
             end
             if xp == self.x0 && yp == self.y0
                 [xp,yp] = self.intersect_x(ybeam, obstacle, xinterval);
@@ -123,8 +123,8 @@ classdef Laser < handle
         end
         
         % Return intersection point with axix Y of obstacle
-        % Otherwise return [0,0]
-        function [xp,yp] = intersect_y(self, ybeam, xo, obstacle)
+        % Otherwise return [x0,y0]
+        function [xp,yp] = intersect_y(self, rad, xo, obstacle)
             syms x;
             mside = obstacle.side/2;
             yi_obs = obstacle.y-mside;
@@ -132,7 +132,8 @@ classdef Laser < handle
             xp = self.x0;
             yp = self.y0;
             
-            ys = subs(ybeam, x, xo);
+            %ys = subs(ybeam, x, xo);
+            ys = tan(rad)*(xo-self.x0)+self.y0;
             xs = xo;
             if (ys >= yi_obs && ys <= yf_obs)
                 xp = xs;
@@ -141,7 +142,7 @@ classdef Laser < handle
         end
         
         % Return intersection point with axix X of obstacle
-        % Otherwise return [0,0]
+        % Otherwise return [x0,y0]
         function [xp,yp] = intersect_x(self, ybeam, obstacle, xinterval)
             syms x;
             mside = obstacle.side/2;
@@ -152,8 +153,7 @@ classdef Laser < handle
             yp = self.y0;
             
             xs=vpasolve(ybeam==yi_obs, xinterval);
-            %xs = (yi_obs+tan(rad)*self.x0+self.y0)/tan(rad);
-            %fprintf("xs: %f\n", xs);
+            %xs = (yi_obs+tan(rad).*self.x0+self.y0)/tan(rad);
             ys=yi_obs;
             if xs
                 if (xs >= xi_obs && xs <= xf_obs)
