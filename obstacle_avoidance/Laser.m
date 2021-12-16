@@ -116,7 +116,7 @@ classdef Laser < handle
                 [xp,yp] = self.intersect_y(rad, xf_obs, obstacle);
             end
             if xp == self.x0 && yp == self.y0
-                [xp,yp] = self.intersect_x(ybeam, obstacle, xinterval);
+                [xp,yp] = self.intersect_x(rad, obstacle);
             end
             xo_in = xp;
             yo_in = yp;
@@ -143,7 +143,7 @@ classdef Laser < handle
         
         % Return intersection point with axix X of obstacle
         % Otherwise return [x0,y0]
-        function [xp,yp] = intersect_x(self, ybeam, obstacle, xinterval)
+        function [xp,yp] = intersect_x(self, rad, obstacle)
             syms x;
             mside = obstacle.side/2;
             xi_obs = obstacle.x-mside;
@@ -152,14 +152,11 @@ classdef Laser < handle
             xp = self.x0;
             yp = self.y0;
             
-            xs=vpasolve(ybeam==yi_obs, xinterval);
-            %xs = (yi_obs+tan(rad).*self.x0+self.y0)/tan(rad);
+            xs = (yi_obs + tan(rad).*self.x0 - self.y0)/tan(rad);
             ys=yi_obs;
-            if xs
-                if (xs >= xi_obs && xs <= xf_obs)
-                    xp = xs;
-                    yp = ys;
-                end
+            if (xs >= xi_obs && xs <= xf_obs)
+                xp = xs;
+                yp = ys;
             end
         end
     end

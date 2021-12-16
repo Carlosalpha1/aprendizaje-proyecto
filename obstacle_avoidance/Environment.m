@@ -31,7 +31,7 @@ classdef Environment < handle
         end
 
         function show(self)
-            clf;
+            % clf;
             plot([-4 -4],[0 20], [4 4], [0 20]);
             hold on
             axis([-10 10 0 10])
@@ -40,7 +40,7 @@ classdef Environment < handle
                 self.obstacles(i).show()
             end
             self.robot.show()
-            pause(0.01)
+            % pause(0.01)
         end
 
     end

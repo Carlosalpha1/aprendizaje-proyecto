@@ -11,7 +11,12 @@ robot = Robot(-2, 3);
 environment.addRobot(robot)
 
 laser = Laser();
-laser.update(environment)
 
-environment.show()
-laser.show()
+for i=1:20
+    clf;
+    environment.robot.move(0.3, 0)
+    laser.update(environment)
+    environment.show()
+    laser.show()
+    pause(0.001);
+end
