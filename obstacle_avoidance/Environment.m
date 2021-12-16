@@ -16,15 +16,10 @@ classdef Environment < handle
     properties
         robot
         obstacles = []
-       
-
     end
+    
     methods
         function self=Environment()
-            plot([-7 -7],[0 10], [2 2], [0 10]);
-            axis([-10 10 0 20]);
-            hold on
-
         end
 
         function addRobot(self, robot)
@@ -37,13 +32,14 @@ classdef Environment < handle
 
         function show(self)
             clf;
-            plot([-7 -7],[0 10], [2 2], [0 10]);
+            plot([-5 -5],[0 20], [5 5], [0 20]);
+            axis([-10 10 0 20]);
             hold on
+            
             for i=1:length(self.obstacles)
                 self.obstacles(i).show()
             end
             self.robot.show()
-            axis([-10 10 0 20]);
             pause(0.01)
         end
 
