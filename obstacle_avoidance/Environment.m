@@ -34,6 +34,7 @@ classdef Environment < handle
             clf;
             plot([-4 -4],[0 20], [4 4], [0 20]);
             hold on
+            axis([-10 10 0 10])
             
             for i=1:length(self.obstacles)
                 self.obstacles(i).show()
