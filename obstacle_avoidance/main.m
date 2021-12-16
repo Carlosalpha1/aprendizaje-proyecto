@@ -1,16 +1,17 @@
 clc; clear all; close all;
 
 environment = Environment();
-j = 0.5;
-obst = Obstacle(1, 2);
 
-robot = Robot(-2.5, 0.5);
+obst1 = Obstacle(2, 5);
+obst2 = Obstacle(-2, 7);
+environment.addObstacle(obst1);
+environment.addObstacle(obst2);
 
-environment.addObstacle(obst);
+robot = Robot(0, 1);
+environment.addRobot(robot)
 
-environment.addRobot(robot);
+laser = Laser();
+laser.update(environment)
 
-for i=1:20
-    environment.robot.move(0.3, 0)
-    environment.show()
-end
+environment.show()
+laser.show()
