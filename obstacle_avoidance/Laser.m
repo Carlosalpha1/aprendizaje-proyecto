@@ -6,30 +6,31 @@
 % --                Carlos Caminero
 % --
 % -- class Laser:
-% --    * Laser(environment) -> Constructor
-% --    * update() -> None
+% --    * Laser(max_angle, increment) -> Constructor
+% --    * update(environment) -> None
 % --    * show() -> None
 % --
-% -- Offers laser distances in laser attribute 
-% -- and plots them (now only from [0,0])
+% -- Offer array of distances. Customizable from 1 to 180.
 % -----------------------------------------------
 
-classdef Laser < handle
-    properties (Access=public)
-        laser = zeros([1 180]);
-    end
-    
+classdef Laser < handle    
     properties (Access=private)
-        x0
-        y0
-        max_angle = 180
-        increment = 4
-        laser_length = 5;
-        infinity = 5.1; % must be larger than laser_lenght
+        laser;             % -- array of distances
+        
+        x0                 % -- pos x of laser in world
+        y0                 % -- pos y of laser in world
+        max_angle          % -- max angle of laser
+        increment          % -- increment of angle beams
+        laser_length = 5;  % -- max laser length
+        infinity = 5.1;    % -- must be larger than laser_lenght
     end
     
     methods (Access=public)
-        function self = Laser()
+        function self = Laser(max_angle, increment)
+            self.max_angle = max_angle;
+            self.increment = increment;
+            self.laser = zeros([1 self.max_angle/self.increment]);
+            self.init_laser_values();
         end
         
         % -- Update laser values
@@ -40,8 +41,8 @@ classdef Laser < handle
             
             index_beam = 1;
             self.init_laser_values();
-            for angle = 1:1:self.max_angle
-                rad = deg2rad(angle);                
+            for angle = 1:self.increment:self.max_angle
+                rad = deg2rad(angle);            
                 % -- check if beam intersects with the obstacles
                 for i = 1:length(obstacles)
                     [xo_in, yo_in] = self.obs_intersect(rad, obstacles(i));
@@ -54,6 +55,7 @@ classdef Laser < handle
             end
         end
         
+        % -- Return array of distances
         function v = get_values(self)
             v = self.laser;
         end
@@ -61,7 +63,7 @@ classdef Laser < handle
         % -- Plot laser values
         function show(self)
             index_beam = 1;
-            for angle = 1:1:self.max_angle
+            for angle = 1:self.increment:self.max_angle
                 rad = deg2rad(angle);
                 length = self.laser(index_beam);
                 if length == self.infinity
@@ -80,15 +82,16 @@ classdef Laser < handle
     end
     
     methods (Access=private)
-        % Init laser values to infinity
+        % -- Init laser values to infinity
         function init_laser_values(self)
-            %num_values = self.max_angle/self.increment;
-            for i = 1:length(self.laser)
+            num_values = self.max_angle/self.increment;
+            for i = 1:num_values
                 self.laser(i) = self.infinity;
             end
         end
         
-        % Return axis x values for given angle from x = 0
+        % -- Return axis x values [x0, laser_length] or [-laser_length, x0] 
+        % -- for given angle
         function xinterval = calc_xinterval(self, rad)
             xinterval = [self.x0 self.laser_length*cos(rad)+self.x0];
             if rad > 1.57
@@ -96,13 +99,13 @@ classdef Laser < handle
             end
         end
         
-        % Return distance between two points 
+        % -- Return distance between two points 
         function d = distance(~, x1, y1, x2, y2)
             d = sqrt((x2-x1)^2+(y2-y1)^2);
         end
         
-        % Return the intersection point with the given obstacle
-        % Otherwise return [0,0]
+        % -- Return the intersection point with the given obstacle
+        % -- Otherwise return [x0,y0]
         function [xo_in, yo_in] = obs_intersect(self, rad, obstacle)
             mside = obstacle.side/2;
             xi_obs = obstacle.x-mside;
@@ -121,8 +124,8 @@ classdef Laser < handle
             yo_in = yp;
         end
         
-        % Return intersection point with axix Y of obstacle
-        % Otherwise return [x0,y0]
+        % -- Return intersection point with axix Y of obstacle
+        % -- Otherwise return [x0,y0]
         function [xp,yp] = intersect_y(self, rad, xo, obstacle)
             mside = obstacle.side/2;
             yi_obs = obstacle.y-mside;
@@ -140,8 +143,8 @@ classdef Laser < handle
             end
         end
         
-        % Return intersection point with axix X of obstacle
-        % Otherwise return [x0,y0]
+        % -- Return intersection point with axix X of obstacle
+        % -- Otherwise return [x0,y0]
         function [xp,yp] = intersect_x(self, rad, obstacle)
             mside = obstacle.side/2;
             xi_obs = obstacle.x-mside;
