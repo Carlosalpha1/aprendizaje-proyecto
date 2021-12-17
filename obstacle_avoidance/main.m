@@ -12,16 +12,16 @@ environment.addObstacle(obst3);
 robot = Robot(0, 0);
 environment.addRobot(robot)
 
-laser = Laser();
+laser = Laser(180, 2);
 
 laser.update(environment)
 
-for i=1:50
+for i=1:100
     clf;
     environment.robot.move(0.1, 0)
     laser.update(environment)
     environment.show()
     laser.show()
-    v = laser.get_values()
-    pause(0.01);
+    v = laser.get_values();
+    pause(0.001);
 end
