@@ -4,19 +4,24 @@ environment = Environment();
 
 obst1 = Obstacle(2, 5);
 obst2 = Obstacle(-4, 7);
+obst3 = Obstacle(-3, 2);
 environment.addObstacle(obst1);
 environment.addObstacle(obst2);
+environment.addObstacle(obst3);
 
-robot = Robot(-2, 3);
+robot = Robot(0, 0);
 environment.addRobot(robot)
 
 laser = Laser();
 
-for i=1:20
+laser.update(environment)
+
+for i=1:50
     clf;
-    environment.robot.move(0.3, 0)
+    environment.robot.move(0.1, 0)
     laser.update(environment)
     environment.show()
     laser.show()
-    pause(0.001);
+    v = laser.get_values()
+    pause(0.01);
 end
