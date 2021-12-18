@@ -1,43 +1,72 @@
+% -----------------------------------------------
+% -- from Obstacle Avoidance
+% --    Authors:    Javier Martinez
+% --                Irene Bandera
+% --                Veronica Tornero
+% --                Carlos Caminero
+% --
+% -- main.m
+% -----------------------------------------------
 clc; clear all; close all;
+
+STEPS=200;
 load dataset.mat
 
+% -- Environment settings 
 environment = Environment();
-
 obst1 = Obstacle(1, 5);
 obst2 = Obstacle(-3, 7);
 obst3 = Obstacle(-2, 2);
+obst4 = Obstacle(-1.5, 6);
+obst5 = Obstacle(2.5, 8);
+obst6 = Obstacle(1, 9.5);
+obst7 = Obstacle(-3, 12);
+obst8 = Obstacle(-3.5, 15);
+obst9 = Obstacle(1, 17);
+obst10 = Obstacle(0, 19);
 environment.addObstacle(obst1);
 environment.addObstacle(obst2);
 environment.addObstacle(obst3);
+environment.addObstacle(obst4);
+environment.addObstacle(obst5);
+environment.addObstacle(obst6);
+environment.addObstacle(obst7);
+environment.addObstacle(obst8);
+environment.addObstacle(obst9);
+environment.addObstacle(obst10);
 
 robot = Robot(0, 0);
-environment.addRobot(robot)
-
 laser = Laser(180, 2);
+environment.addRobot(robot);
 
-% -- Train Neural Network ---------
-X = data(:, 1:2)'
-Y = data(:, 3)'
+% -- Training Neural Network ---------
+X = data(:, 1:2)';
+Y = data(:, 3)';
 
-net = fitnet(1, 'trainlm');
+net = fitnet(5, 'trainlm');
 net.trainParam.epochs = 10000;
-net.trainParam.goal = 0.000000000000001
+net.trainParam.goal = 0
 net.trainParam.max_fail = 100;
 net.divideParam.trainRatio = 70/100;
 net.divideParam.valRatio = 15/100;
 net.divideParam.testRatio = 15/100;
 net = train(net, X, Y);
-% ----------------------------------
 
-for i=1:100
+% -- sim2sim
+for i=1:STEPS
     clf;
     laser.update(environment)
     v = laser.get_values();
-    left_mean = mean_(v(1, 1:length(v)/2));
-    right_mean = mean_(v(1, (length(v)/2+1):length(v)));
+    
+    % -- new input data
+    right_mean = mean_(v(1, 1:length(v)/2));
+    left_mean = mean_(v(1, (length(v)/2+1):length(v)));
+    
+    % -- predict angular velocity
     az = sim(net, [left_mean; right_mean]);
-    % fprintf("az: %f\n", az);
     environment.robot.move(0.1, az)
+    
+    % -- Show results
     environment.show();
     laser.show();
     pause(0.01);
@@ -47,12 +76,8 @@ end
 function m = mean_(arr)
     [~, n] = size(arr);
     m = 0;
-    c = 0;
     for i=1:n
-        if arr(i) > 0
-            m = m + arr(i);
-            c = c + 1;
-        end
+        m = m + arr(i);
     end
-    m = m/c;
+    m = m/n;
 end

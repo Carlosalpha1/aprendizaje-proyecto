@@ -11,7 +11,7 @@
 clear all; close all; clc;
 
 NSIM = 3000;  % -- simulations
-FACTOR = 0.008;
+FACTOR = 0.08;
 
 % -- main ----------------------
 data = [];
@@ -29,7 +29,6 @@ environment.addObstacle(obst3);
 laser = Laser(180, 2);
 
 for i=1:NSIM
-    %clf;
     robot = Robot(-5 + 10*rand(), 5*rand());
     environment.addRobot(robot)
     laser.update(environment)
@@ -43,27 +42,18 @@ save('dataset.mat', 'data');
 % --------------------------------
 
 
-
 function [lm, rm, az] = velocity_from_laser(values, factor)
     n = length(values);
     lm = mean_(values(1, 1:n/2));
     rm = mean_(values(1, (n/2+1):n));
-    if (lm == rm)
-        az = 0;
-    else
-        az = factor / (-lm + rm);
-    end
+    az = factor * (-lm + rm);
 end
 
 function m = mean_(arr)
     [~, n] = size(arr);
     m = 0;
-    c = 0;
     for i=1:n
-        if arr(i) > 0
-            m = m + arr(i);
-            c = c + 1;
-        end
+        m = m + arr(i);
     end
-    m = m/c;
+    m = m/n;
 end
