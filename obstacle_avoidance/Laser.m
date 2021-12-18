@@ -69,10 +69,7 @@ classdef Laser < handle
                 if length == self.infinity
                     length = self.laser_length;
                 end
-                x = self.x0:0.001:length*cos(rad)+self.x0;
-                if rad > deg2rad(90)
-                    x = -length*cos(deg2rad(180)-rad)+self.x0:0.001:self.x0;
-                end
+                x = self.calc_xinterval(rad, length);
                 y = tan(rad)*(x-self.x0)+self.y0;
                 plot(x,y);
                 hold on;
@@ -92,10 +89,10 @@ classdef Laser < handle
         
         % -- Return axis x values [x0, laser_length] or [-laser_length, x0] 
         % -- for given angle
-        function xinterval = calc_xinterval(self, rad)
-            xinterval = [self.x0 self.laser_length*cos(rad)+self.x0];
+        function xinterval = calc_xinterval(self, rad, length)
+            xinterval = [self.x0 length*cos(rad)+self.x0];
             if rad > 1.57
-                xinterval = [-self.laser_length*cos(deg2rad(180)-rad)+self.x0 self.x0];
+                xinterval = [-length*cos(deg2rad(180)-rad)+self.x0 self.x0];
             end
         end
         
