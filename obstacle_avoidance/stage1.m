@@ -5,7 +5,7 @@
 % --                Veronica Tornero
 % --                Carlos Caminero
 % --
-% -- main.m
+% -- stage1.m
 % -----------------------------------------------
 clc; clear all; close all;
 
