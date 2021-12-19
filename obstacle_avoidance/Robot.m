@@ -11,14 +11,14 @@
 % --    * move(v, w) -> None
 % --    * sayPosition() -> None
 % --    * show() -> None
-% -- It represents an Obstacle on Environment.
+% -- It represents a Robot on Environment.
 % -----------------------------------------------
 
 classdef Robot < handle % handle para que me deje px y py en las funciones de la clase
     
     properties (Access=public)
-      px
-      py
+      px                 % -- pos x of the robot in the enviroment
+      py                 % -- pos y of the robot in the enviroment
       % orientation = 0;
     end
    
@@ -31,7 +31,6 @@ classdef Robot < handle % handle para que me deje px y py en las funciones de la
       function showMovement(self, v_10, w_10)
          trajectory = animatedline('Color',[0 .7 .7]);
          pos_robot = animatedline('Marker','o');
-         %axis([0 20 0 20])
          
          for i = 1:100
             x_ = self.px + (w_10 * i);
@@ -53,6 +52,7 @@ classdef Robot < handle % handle para que me deje px y py en las funciones de la
          self.py = y_;
       end
       
+      % -- Change the position of the robot
       function move(self, v, w)
 %          v_10 = v / 100;
 %          w_10 = w / 100;
@@ -62,10 +62,12 @@ classdef Robot < handle % handle para que me deje px y py en las funciones de la
          
       end
       
+      % -- Print position of the robot
       function sayPosition(self)
           fprintf("Hi, my position is (%d,%d)\n", self.px, self.py);
       end
       
+      % -- Plot robot in its position
       function show(self)
           plot(self.px, self.py, '-m', 'Marker','o','MarkerSize',15,'LineWidth', 3);
           hold on;
