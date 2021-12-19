@@ -19,7 +19,6 @@ classdef Robot < handle % handle para que me deje px y py en las funciones de la
     properties (Access=public)
       px                 % -- pos x of the robot in the enviroment
       py                 % -- pos y of the robot in the enviroment
-      % orientation = 0;
     end
    
     methods
@@ -28,38 +27,10 @@ classdef Robot < handle % handle para que me deje px y py en las funciones de la
           self.py = y;
       end
       
-      function showMovement(self, v_10, w_10)
-         trajectory = animatedline('Color',[0 .7 .7]);
-         pos_robot = animatedline('Marker','o');
-         
-         for i = 1:100
-            x_ = self.px + (w_10 * i);
-            y_ = self.py + (v_10 * i);
-            
-            addpoints(trajectory,x_,y_);
-            
-            % update screen
-            drawnow limitrate
-            %pause(0.01)
-         end 
-         addpoints(pos_robot,x_,y_);
-            
-         % update screen
-         drawnow limitrate
-         pause(0.01)
-         
-         self.px = x_;
-         self.py = y_;
-      end
-      
       % -- Change the position of the robot
       function move(self, v, w)
-%          v_10 = v / 100;
-%          w_10 = w / 100;
-%          self.showMovement(v_10, w_10);
          self.px = self.px + w;
-         self.py = self.py + v;
-         
+         self.py = self.py + v; 
       end
       
       % -- Print position of the robot
