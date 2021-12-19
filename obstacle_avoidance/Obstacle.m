@@ -14,16 +14,16 @@
 classdef Obstacle < handle
     
     properties (Access=public)
-        x
-        y
-        side = 0.75
+        x               % -- pos x of the obstacle in the enviroment
+        y               % -- pos y of the obstacle in the enviroment
+        side = 0.75     % -- set the size of the obstacle
     end
     
     properties (Access=private)
-        x1
-        x2
-        y1
-        y2
+        x1              % -- pos x of the lower left point of the obstacle
+        x2              % -- pos x of the upper right point of the obstacle
+        y1              % -- pos y of the lower left point of the obstacle
+        y2              % -- pos y of the upper right point of the obstacle
     end
     
     methods
@@ -36,6 +36,7 @@ classdef Obstacle < handle
             self.y2 = y+self.side/2;
         end
         
+        % -- Plot obstacle in its position
         function show(self)
             X = [self.x1, self.x2, self.x2, self.x1, self.x1];
             Y = [self.y1, self.y1, self.y2, self.y2, self.y1];
