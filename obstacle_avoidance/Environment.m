@@ -14,22 +14,25 @@
 % -----------------------------------------------
 classdef Environment < handle
     properties
-        robot
-        obstacles = []
+        robot           % -- Robot class of Robot.m
+        obstacles = []  % -- Array to save all the obstacles     
     end
     
     methods
         function self=Environment()
         end
-
+        
+        % -- Add the robot to the environment
         function addRobot(self, robot)
             self.robot = robot;
         end
-
+        
+        % -- Add an obstacle to the environment
         function addObstacle(self, obstacle)
             self.obstacles = [self.obstacles, obstacle];
         end
-
+        
+        % -- Show the enviroment with the robot and the obstacles
         function show(self)
             plot([-4 -4],[0 20], [4 4], [0 20]); hold on;
             axis([-10 10 0 20])
