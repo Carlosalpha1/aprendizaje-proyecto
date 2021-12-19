@@ -1,7 +1,7 @@
 # Navegación Autónoma basada en Redes Neuronales
 <div align="center">
   <a href="https://github.com/Carlosalpha1/aprendizaje-proyecto">
-    <img src="docs/red-neuronal.png" alt="Portada" width="100" height="80">
+    <img src="docs/README/red-neuronal.png" alt="Portada" width="100" height="80">
   </a>
   <h3 align="center">Un Proyecto de Machine Learning</h3>
 </div>
